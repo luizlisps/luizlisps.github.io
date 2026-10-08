@@ -13,7 +13,7 @@ const items = headings;
     <nav class="post-toc" aria-label="índice do post">
         <p>tópicos:</p>
 
-        <ul>
+        <ul class="list-asterisk">
             {items.map(({ depth, slug, text }) => (
                 <li class="post-toc-item" style={`margin-inline-start: ${(depth - 1) * 1.25}rem;`}>
                     <a href={`#${slug}`}>{text}</a>
@@ -30,18 +30,17 @@ const items = headings;
     }
 
     .post-toc p {
-        color: var(--sunbather-text-subtle);
+        color: var(--theme-text-subtle);
     }
 
     .post-toc ul {
-        list-style: disc;
         margin-block-start: 0.35rem;
         padding-inline-start: 1.5rem;
     }
 
 
     .post-toc-item a:focus-visible {
-        outline: 2px solid var(--sunbather-accent);
+        outline: 2px solid var(--theme-accent);
         outline-offset: 0.2rem;
     }
 </style>

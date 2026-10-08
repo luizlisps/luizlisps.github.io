@@ -2,8 +2,8 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import expressiveCode from "astro-expressive-code";
-import sunbatherDark from "./src/styles/sunbather-dark.json" with { type: "json" };
-import sunbatherLight from "./src/styles/sunbather-light.json" with { type: "json" };
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
 
 /**
  * @typedef {import("hast").Element} HastElement
@@ -143,12 +143,11 @@ function rehypeImageCaptions() {
 
 export default defineConfig({
   integrations: [expressiveCode({
-    themes: [sunbatherDark, sunbatherLight],
-    useDarkModeMediaQuery: true,
+    themes: ["github-light"],
     styleOverrides: {
       borderRadius: "0",
       codeFontFamily: codeFontStack,
-      codeFontSize: "0.8rem",
+      codeFontSize: "0.9rem",
     },
   })],
   vite: {
@@ -157,7 +156,8 @@ export default defineConfig({
     ),
   },
   markdown: {
-    rehypePlugins: [rehypeImageCaptions],
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex, rehypeImageCaptions],
   },
   site: "https://talkinghead.blog.br",
 });

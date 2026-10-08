@@ -4,7 +4,6 @@ title: início
 description: esse é o meu pedacinho de história na internet.
 ---
 
-![fmabh.gif](../assets/img/fmabh.gif)
 
 **seja bem vindo(a)!**
 

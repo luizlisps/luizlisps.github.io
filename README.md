@@ -1,6 +1,6 @@
 # talkinghead
 
-Site pessoal em Astro.
+Site pessoal em Astro. O blog e os blocos de código usam Paper Mono ([releases](https://github.com/paper-design/paper-mono/releases); ligaturas, duospace e espaço estreito ativos no código; demais opções OpenType desligadas; licença em `public/fonts/paper-mono-OFL.txt`). A home exibe o aquário ASCII do [ascii.rest](https://ascii.rest/aquarium/).
 
 ## Fluxo editorial
 

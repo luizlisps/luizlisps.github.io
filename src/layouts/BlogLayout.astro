@@ -30,7 +30,7 @@ const seoDescription = frontmatter.description ?? "meu pedacinho de história na
                                 <span>{formatDate(post.data.publishDate)}</span>
                                 {post.data.tags && post.data.tags.length > 0 ? (
                                     <>
-                                        <span class="meta-dot">•</span>
+                                        <span class="meta-separator">*</span>
                                         <div class="flex flex-wrap gap-x-2">
                                             {post.data.tags.map((tag, index) => (
                                                 <a href={`/tags/${tag}/`} class={tagClass(index)}>#{tag}</a>

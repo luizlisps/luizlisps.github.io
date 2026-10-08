@@ -1,4 +1,12 @@
 @font-face {
+    font-family: "Paper Mono";
+    src: url("/fonts/paper-mono-variable.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: swap;
+}
+
+@font-face {
     font-family: "Cheltenham Bold Condensed";
     src: url("/fonts/cheltenham-bold-condensed.ttf") format("truetype");
     font-style: normal;
@@ -26,7 +34,7 @@
         --sunbather-yellow: #a89c14;
         --sunbather-red: #c30771;
         --sunbather-orange: #d75f5f;
-        --font-mono: Monaco, "Lucida Console", monospace;
+        --font-mono: "Paper Mono", monospace;
         --nvim-divider-pattern: "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
     }
 
@@ -57,7 +65,7 @@
     body {
         background-color: var(--sunbather-bg);
         color: var(--sunbather-text);
-        font-family: "Times New Roman", Times, serif;
+        font-family: "Paper Mono", monospace;
         @apply min-h-screen;
     }
 
@@ -122,6 +130,11 @@
     pre {
         color: var(--sunbather-text);
         font-family: var(--font-mono);
+    }
+
+    code,
+    .expressive-code {
+        font-feature-settings: "ss01" 1, "ss02" 1, "ss03" 1, "ss04" 0, "cv01" 0, "zero" 0;
     }
 
     img,
@@ -196,7 +209,7 @@
         @apply flex flex-wrap items-center gap-x-2 gap-y-1 text-sm;
     }
 
-    .meta-dot {
+    .meta-separator {
         color: var(--sunbather-bg-subtle);
     }
 
@@ -227,8 +240,6 @@
     .post-content p,
     .post-content li,
     .post-content blockquote {
-        text-align: justify;
-        text-justify: inter-word;
         @apply leading-7;
     }
 

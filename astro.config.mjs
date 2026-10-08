@@ -13,7 +13,7 @@ import sunbatherLight from "./src/styles/sunbather-light.json" with { type: "jso
  * @typedef {import("hast").Root} HastRoot
  */
 
-const codeFontStack = 'Monaco, "Lucida Console", monospace';
+const codeFontStack = '"Paper Mono", monospace';
 
 /**
  * @param {HastNode | null | undefined} node

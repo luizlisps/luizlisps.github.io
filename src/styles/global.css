@@ -292,9 +292,24 @@
         list-style: none;
     }
 
-    .list-asterisk > li::marker,
-    .post-content ul > li::marker {
-        content: "* ";
+    .list-asterisk > li,
+    .post-content ul > li {
+        position: relative;
+    }
+
+    .list-asterisk > li::before,
+    .post-content ul > li::before {
+        content: "*";
+        position: absolute;
+        top: 0;
+    }
+
+    .list-asterisk > li::before {
+        inset-inline-start: -1.25em;
+    }
+
+    .post-content ul > li::before {
+        inset-inline-start: -1.5em;
     }
 
     .post-content ol {

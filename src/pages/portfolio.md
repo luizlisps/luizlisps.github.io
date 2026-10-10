@@ -1,5 +1,5 @@
 ---
 layout: ../layouts/PortfolioLayout.astro
 title: portfolio
-description: Experiências em backend, dados e sistemas distribuídos.
+description: Entradas profissionais e projetos selecionados de backend, dados, NLP e IA.
 ---

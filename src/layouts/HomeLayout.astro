@@ -6,16 +6,10 @@ const { frontmatter } = Astro.props;
 const { title, description } = frontmatter;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} ogImage="/og-mandelbrot.png">
     <Ascii piece="aquarium" class="home-aquarium" label="Animação em ASCII de um aquário" />
     <section class="post-content w-full">
         <slot />
     </section>
 
-<style>
-    :global(.home-aquarium pre) {
-        font-family: "Paper Mono", monospace;
-        font-size: clamp(0.4rem, 2vw, 1rem);
-    }
-</style>
 </BaseLayout>

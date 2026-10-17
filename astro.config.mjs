@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import expressiveCode from "astro-expressive-code";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
+import glossary from "./src/data/glossary.json" with { type: "json" };
 
 /**
  * @typedef {import("hast").Element} HastElement
@@ -141,6 +142,43 @@ function rehypeImageCaptions() {
   };
 }
 
+/**
+ * Envolve `<em>` cujo texto está em `src/data/glossary.json` com um tooltip.
+ */
+function rehypeGlossary() {
+  /**
+   * @param {HastNode} node
+   * @param {HastParent} parent
+   */
+  function walk(node, parent) {
+    if (node.type !== "element") return;
+    if (node.tagName === "code" || node.tagName === "pre") return;
+
+    if (node.tagName === "em" && node.children.length === 1 && node.children[0].type === "text") {
+      const definition = glossary[node.children[0].value.trim().toLowerCase()];
+      const index = parent.children.indexOf(node);
+      if (definition && index !== -1) {
+        parent.children[index] = {
+          type: "element",
+          tagName: "span",
+          properties: { className: ["term"], tabIndex: 0, "data-tip": definition },
+          children: [node],
+        };
+      }
+      return;
+    }
+
+    for (const child of [...node.children]) walk(child, node);
+  }
+
+  /**
+   * @param {HastRoot} tree
+   */
+  return (tree) => {
+    for (const child of [...tree.children]) walk(child, tree);
+  };
+}
+
 export default defineConfig({
   integrations: [expressiveCode({
     themes: ["github-light"],
@@ -157,7 +195,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeImageCaptions],
+    rehypePlugins: [rehypeKatex, rehypeImageCaptions, rehypeGlossary],
   },
   site: "https://talkinghead.blog.br",
 });

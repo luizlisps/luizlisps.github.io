@@ -1,0 +1,6 @@
+{
+  "2fa": "Two-Factor Authentication: autenticação em dois fatores. Além da senha, exige algo que você tem (app, token, chave física).",
+  "rdp": "Remote Desktop Protocol: protocolo da Microsoft para controlar outro computador remotamente, pela porta 3389.",
+  "port-forwarding": "Redirecionamento de portas: faz o roteador encaminhar tráfego vindo da internet para uma máquina da rede local.",
+  "tailnet": "A rede privada virtual criada pelo Tailscale, que conecta seus dispositivos como se estivessem na mesma LAN."
+}

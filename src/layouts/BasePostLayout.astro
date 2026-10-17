@@ -112,3 +112,13 @@ const articleSchema = {
         <p class="post-signoff muted mt-8 text-center italic">YOU'RE GONNA CARRY THAT WEIGHT.</p>
     </article>
 </BaseLayout>
+
+<script>
+    document.addEventListener("click", (event) => {
+        const term = (event.target as Element).closest(".term");
+        document.querySelectorAll(".term.open").forEach((open) => {
+            if (open !== term) open.classList.remove("open");
+        });
+        term?.classList.toggle("open");
+    });
+</script>

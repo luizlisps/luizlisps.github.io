@@ -154,8 +154,9 @@ function rehypeGlossary() {
     if (node.type !== "element") return;
     if (node.tagName === "code" || node.tagName === "pre") return;
 
-    if (node.tagName === "em" && node.children.length === 1 && node.children[0].type === "text") {
-      const definition = glossary[node.children[0].value.trim().toLowerCase()];
+    const text = node.children[0];
+    if (node.tagName === "em" && node.children.length === 1 && text?.type === "text") {
+      const definition = /** @type {Record<string, string>} */ (glossary)[text.value.trim().toLowerCase()];
       const index = parent.children.indexOf(node);
       if (definition && index !== -1) {
         parent.children[index] = {

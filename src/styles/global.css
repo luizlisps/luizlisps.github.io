@@ -381,12 +381,29 @@
 
     @media (max-width: 640px) {
         .term {
-            border-bottom: 0;
-            cursor: auto;
+            cursor: pointer;
+            position: static;
         }
 
         .term::after {
-            display: none;
+            bottom: 1rem;
+            font-size: 0.875rem;
+            inset-inline: 1rem;
+            max-width: none;
+            position: fixed;
+            top: auto;
+            width: auto;
+        }
+
+        .term:hover::after,
+        .term:focus::after {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .term.open::after {
+            opacity: 1;
+            visibility: visible;
         }
     }
 

@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+import { glossarySchema } from "./schemas/glossary";
 
 const posts = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
@@ -35,4 +36,9 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { posts, updates, projects };
+const glossary = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/glossary" }),
+  schema: glossarySchema,
+});
+
+export const collections = { posts, updates, projects, glossary };

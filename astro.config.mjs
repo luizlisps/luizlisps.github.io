@@ -1,10 +1,12 @@
 // @ts-check
+import { readdirSync, readFileSync } from "node:fs";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import expressiveCode from "astro-expressive-code";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
-import glossary from "./src/data/glossary.json" with { type: "json" };
+import { parse as parseYaml } from "yaml";
+import { glossarySchema } from "./src/schemas/glossary.ts";
 
 /**
  * @typedef {import("hast").Element} HastElement
@@ -15,6 +17,7 @@ import glossary from "./src/data/glossary.json" with { type: "json" };
  */
 
 const codeFontStack = '"Paper Mono", monospace';
+const site = "https://talkinghead.blog.br";
 
 /**
  * @param {HastNode | null | undefined} node
@@ -143,7 +146,42 @@ function rehypeImageCaptions() {
 }
 
 /**
- * Envolve `<em>` cujo texto está em `src/data/glossary.json` com um tooltip.
+ * @param {string} text
+ */
+function normalizeTerm(text) {
+  return text.trim().toLowerCase().replace(/[\s-]+/g, "-");
+}
+
+/**
+ * Lê `src/content/glossary/*.md` e indexa cada termo (nome do arquivo, `term` e `aliases`)
+ * pela forma normalizada, apontando para a definição (corpo do arquivo).
+ * @returns {Map<string, string>}
+ */
+function loadGlossary() {
+  const dir = new URL("./src/content/glossary/", import.meta.url);
+  /** @type {Map<string, string>} */
+  const index = new Map();
+
+  for (const file of readdirSync(dir).filter((name) => name.endsWith(".md"))) {
+    const source = readFileSync(new URL(file, dir), "utf8");
+    const match = source.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    const [, frontmatter = "", body = ""] = match ?? [];
+    const parsed = glossarySchema.safeParse(parseYaml(frontmatter));
+    if (!parsed.success) throw new Error(`glossary/${file}: ${parsed.error.message}`);
+
+    const { term, aliases } = parsed.data;
+    for (const name of [file.replace(/\.md$/, ""), term, ...aliases]) {
+      index.set(normalizeTerm(name), body.trim());
+    }
+  }
+
+  return index;
+}
+
+const glossary = loadGlossary();
+
+/**
+ * Envolve `<em>` cujo texto está em `src/content/glossary` com um tooltip.
  */
 function rehypeGlossary() {
   /**
@@ -156,7 +194,7 @@ function rehypeGlossary() {
 
     const text = node.children[0];
     if (node.tagName === "em" && node.children.length === 1 && text?.type === "text") {
-      const definition = /** @type {Record<string, string>} */ (glossary)[text.value.trim().toLowerCase()];
+      const definition = glossary.get(normalizeTerm(text.value));
       const index = parent.children.indexOf(node);
       if (definition && index !== -1) {
         parent.children[index] = {
@@ -180,6 +218,33 @@ function rehypeGlossary() {
   };
 }
 
+/**
+ * Abre links externos em nova aba.
+ */
+function rehypeExternalLinks() {
+  /**
+   * @param {HastNode} node
+   */
+  function walk(node) {
+    if (node.type !== "element") return;
+
+    const href = node.properties["href"];
+    if (node.tagName === "a" && typeof href === "string" && /^https?:\/\//.test(href) && !href.startsWith(site)) {
+      node.properties["target"] = "_blank";
+      node.properties["rel"] = ["noopener", "noreferrer"];
+    }
+
+    for (const child of node.children) walk(child);
+  }
+
+  /**
+   * @param {HastRoot} tree
+   */
+  return (tree) => {
+    for (const child of tree.children) walk(child);
+  };
+}
+
 export default defineConfig({
   integrations: [expressiveCode({
     themes: ["github-light"],
@@ -196,7 +261,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex, rehypeImageCaptions, rehypeGlossary],
+    rehypePlugins: [rehypeKatex, rehypeImageCaptions, rehypeGlossary, rehypeExternalLinks],
   },
-  site: "https://talkinghead.blog.br",
+  site,
 });

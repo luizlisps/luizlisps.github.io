@@ -4,6 +4,7 @@ tldr: false
 date: 2026-10-14
 publishDate: 2026-10-18
 draft: false
+tags: ["self-hosting", "financas", "setup"]
 ---
 
 # Início

@@ -50,7 +50,7 @@ Bom, na prática eu limito quem pode acessar o _SSH_ ao grupo seleto que tem ace
 
 Com tudo isso feito, posso configurar o [_Securo_](https://www.usesecuro.com/pt) rodando como um serviço dentro de uma porta no servidor. E o que é o [_Securo_](https://www.usesecuro.com/pt), afinal? É um serviço _open-source_ de gerenciamento financeiro que se conecta diretamente ao _open-finance_ via [_Pluggy_](https://meu.pluggy.ai) e pode ser hospedado localmente.
 
-Sério, eu achei esse projeto simplesmente **incrível**, ele resolve todas as minhas dores relacionadas à organização financeira. Eu não tenho mais trabalho de subir despesas; de calcular para onde tá indo cada coisa; quanto eu gastei do meu _income_ em coisas superfuluas. Ele já faz tudo isso automaticamente, e pra melhorar, de forma gratuita. Veja por si só: [usesecuro.com](https://www.usesecuro.com/pt)
+Sério, eu achei esse projeto simplesmente **incrível**, ele resolve todas as minhas dores relacionadas à organização financeira. Eu não tenho mais trabalho de subir despesas; de calcular para onde tá indo cada coisa; quanto eu gastei do meu _income_ em coisas supérfluas. Ele já faz tudo isso automaticamente, e pra melhorar, de forma gratuita. Veja por si só: [usesecuro.com](https://www.usesecuro.com/pt)
 
 # Conclusão
 

@@ -2,7 +2,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
-import expressiveCode from "astro-expressive-code";
+import expressiveCode, { ExpressiveCodeTheme } from "astro-expressive-code";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import { parse as parseYaml } from "yaml";
@@ -247,7 +247,13 @@ function rehypeExternalLinks() {
 
 export default defineConfig({
   integrations: [expressiveCode({
-    themes: ["github-light"],
+    themes: [
+      ExpressiveCodeTheme.fromJSONString(readFileSync(new URL("./src/themes/seoul256-dark.json", import.meta.url), "utf8")),
+      ExpressiveCodeTheme.fromJSONString(readFileSync(new URL("./src/themes/seoul256-light.json", import.meta.url), "utf8")),
+    ],
+    useDarkModeMediaQuery: true,
+    minSyntaxHighlightingColorContrast: 0,
+    themeCssSelector: () => false,
     styleOverrides: {
       borderRadius: "0",
       codeFontFamily: codeFontStack,

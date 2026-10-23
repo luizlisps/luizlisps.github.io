@@ -1,0 +1,88 @@
+<pre
+    id="plasma-bg"
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-0 -z-10 m-0 select-none overflow-hidden whitespace-pre bg-[linear-gradient(120deg,var(--theme-accent),var(--theme-bg-subtle)_55%,var(--theme-visited))] bg-clip-text text-[12px] leading-[14px] text-transparent opacity-75 [font-family:var(--font-mono)] [mask-composite:intersect] [mask-image:linear-gradient(to_right,#000,rgb(0_0_0/0.45)_28%,rgb(0_0_0/0.45)_72%,#000),linear-gradient(to_bottom,rgb(0_0_0/0.8),#000_50%)] [-webkit-mask-composite:source-in] dark:opacity-55"
+></pre>
+
+<script>
+    // Plasma by @bas3line (ascii.rest/plasma): four sine fields summed, read through a char ramp.
+    const RAMP = ".,-~:;=+*#%@";
+    const N = RAMP.length;
+    const P = 30;
+    const W = (2 * Math.PI) / P;
+    const GAIN = 0.32;
+    const REF_COLS = 64;
+    const REF_ROWS = 22;
+    const FPS = 24;
+
+    const el = document.getElementById("plasma-bg") as HTMLPreElement;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+
+    let cols = 0;
+    let rows = 0;
+    let X = new Float32Array(0);
+    let Y = new Float32Array(0);
+
+    function layout() {
+        const probe = document.createElement("span");
+        probe.textContent = "M".repeat(100);
+        el.appendChild(probe);
+        const cw = probe.getBoundingClientRect().width / 100 || 7.2;
+        probe.remove();
+        cols = Math.ceil(innerWidth / cw) + 1;
+        rows = Math.ceil(innerHeight / 14) + 1;
+        // Normalise so blobs keep the reference piece's proportions at any size.
+        X = Float32Array.from({ length: cols }, (_, c) => (c + 0.5 - cols / 2) * (REF_COLS / cols));
+        Y = Float32Array.from({ length: rows }, (_, r) => (r + 0.5 - rows / 2) * 2 * (REF_ROWS / rows));
+    }
+
+    function frame(t: number) {
+        const a = W * t;
+        const ca = Math.cos(a);
+        const sa = Math.sin(a);
+        const cx = 14 * Math.sin(a);
+        const cy = 9 * Math.cos(2 * a);
+        const out = new Array<string>(cols);
+        const lines: string[] = [];
+        for (let r = 0; r < rows; r++) {
+            const y = Y[r]!;
+            for (let c = 0; c < cols; c++) {
+                const x = X[c]!;
+                let v = Math.sin(x * 0.11 + 3 * a);
+                v += Math.sin(y * 0.13 - 2 * a);
+                v += Math.sin((x * ca + y * sa) * 0.09 + 4 * a);
+                v += Math.sin(Math.hypot(x - cx, y - cy) * 0.17 - 5 * a);
+                const u = v * GAIN + a / Math.PI;
+                const k = Math.abs(u - 2 * Math.floor(u / 2 + 0.5));
+                out[c] = RAMP[Math.min(N - 1, Math.floor(k * N))]!;
+            }
+            lines.push(out.join(""));
+        }
+        el.textContent = lines.join("\n");
+    }
+
+    let raf = 0;
+    let last = 0;
+    function tick(now: number) {
+        raf = requestAnimationFrame(tick);
+        if (now - last < 1000 / FPS) return;
+        last = now;
+        frame(now / 1000);
+    }
+
+    function start() {
+        cancelAnimationFrame(raf);
+        layout();
+        if (reduced.matches || document.hidden) frame(0);
+        if (!reduced.matches && !document.hidden) raf = requestAnimationFrame(tick);
+    }
+
+    let resizeTimer = 0;
+    addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(start, 150);
+    });
+    document.addEventListener("visibilitychange", start);
+    reduced.addEventListener("change", start);
+    start();
+</script>

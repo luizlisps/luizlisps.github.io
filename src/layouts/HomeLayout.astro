@@ -1,22 +1,43 @@
 ---
-import Ascii from "ascii.rest/astro";
+import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
+import FrierenSpin from "@components/FrierenSpin.astro";
 
 const { frontmatter } = Astro.props;
 const { title, description } = frontmatter;
+
+const projects = (await getCollection("projects")).sort((a, b) =>
+    a.id.localeCompare(b.id),
+);
 ---
 
 <BaseLayout title={title} description={description} ogImage="/og-mandelbrot.png">
-    <Ascii piece="aquarium" class="home-aquarium" label="Animação em ASCII de um aquário" />
-    <section class="post-content w-full">
-        <slot />
+    <section class="flex flex-col-reverse items-center gap-6 py-4 sm:flex-row sm:gap-10">
+        <div class="w-full min-w-0">
+            <div class="post-content text-lg">
+                <slot />
+            </div>
+            <ul class="mt-4 space-y-3" aria-label="Experiência">
+                {projects.map(({ data: project }) => (
+                    <li class="flex items-center gap-2">
+                        <span class="flex h-5 w-5 flex-none items-center justify-center" aria-hidden="true">
+                            {project.logo && (
+                                <img src={project.logo} alt="" width="20" height="20" class="h-5 w-5 object-contain" />
+                            )}
+                        </span>
+                        {project.url ? (
+                            <a href={project.url} target="_blank" rel="noopener noreferrer" class="font-semibold">
+                                {project.name}
+                            </a>
+                        ) : (
+                            <span class="font-semibold">{project.name}</span>
+                        )}
+                        <span class="meta-separator" aria-hidden="true">.</span>
+                        <span class="muted">{project.role}</span>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        <FrierenSpin />
     </section>
-
-<style>
-    :global(.home-aquarium pre) {
-        font-family: "Paper Mono", monospace;
-        font-size: clamp(0.4rem, 2vw, 1rem);
-    }
-</style>
-
 </BaseLayout>

@@ -29,10 +29,10 @@ const updates = defineCollection({
 const projects = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/projects" }),
   schema: z.object({
-    title: z.string(),
-    organization: z.string(),
-    period: z.string(),
-    bullets: z.array(z.string()),
+    name: z.string(),
+    role: z.string(),
+    url: z.url().optional(),
+    logo: z.string().optional(),
   }),
 });
 

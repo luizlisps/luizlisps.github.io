@@ -1,0 +1,52 @@
+<button
+    type="button"
+    id="frieren-spin"
+    class="flex flex-none cursor-pointer select-none flex-col items-center gap-1 [-webkit-tap-highlight-color:transparent] active:scale-95"
+    aria-label="Frieren girando. Clique para girar mais rápido"
+>
+    <!-- 6 frames of 166x148 in a 996px strip (frieren-spin.webp, 2x for retina) -->
+    <span
+        class="frieren-sprite block h-[148px] w-[166px] bg-[url('/frieren-spin.webp')] bg-[length:996px_148px] bg-no-repeat"
+    ></span>
+    <span class="text-xs" aria-hidden="true">↑ clique na frieren</span>
+</button>
+
+<script>
+    const FRAME_W = 166;
+    const FRAMES = 6;
+    const PERIOD_MS = 1200;
+    const MAX_RATE = 12;
+    const BOOST = 3;
+    const DECAY_MS = 1400;
+
+    const button = document.getElementById("frieren-spin");
+    const sprite = button?.querySelector<HTMLElement>(".frieren-sprite");
+
+    if (button && sprite && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const animation = sprite.animate(
+            [{ backgroundPositionX: "0px" }, { backgroundPositionX: `${-FRAME_W * FRAMES}px` }],
+            { duration: PERIOD_MS, iterations: Infinity, easing: `steps(${FRAMES})` },
+        );
+
+        let rate = 1;
+        let last = 0;
+        let raf = 0;
+
+        const settle = (now: number) => {
+            const dt = now - last;
+            last = now;
+            rate = 1 + (rate - 1) * Math.exp(-dt / DECAY_MS);
+            if (rate < 1.02) rate = 1;
+            animation.updatePlaybackRate(rate);
+            if (rate > 1) raf = requestAnimationFrame(settle);
+        };
+
+        button.addEventListener("click", () => {
+            rate = Math.min(MAX_RATE, rate + BOOST);
+            animation.updatePlaybackRate(rate);
+            cancelAnimationFrame(raf);
+            last = performance.now();
+            raf = requestAnimationFrame(settle);
+        });
+    }
+</script>

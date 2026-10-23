@@ -19,20 +19,45 @@
 
 @layer base {
     :root {
-        color-scheme: light;
-        --theme-bg: #ffffff;
-        --theme-bg-muted: #f3f4f6;
-        --theme-bg-subtle: #6b7280;
-        --theme-text: #000000;
-        --theme-text-subtle: #111827;
-        --theme-border: #d1d5db;
-        --theme-accent: #0000ee;
-        --theme-link: #0000ee;
-        --theme-orange: #4b5563;
-        --theme-selection-bg: #dbeafe;
-        --theme-selection-fg: #000000;
+        /* seoul256 (junegunn/seoul256.vim), default iTerm2 RGB map.
+           Light: bg 253, fg 239. Names after the Vim highlight group each value comes from. */
+        color-scheme: light dark;
+        --theme-bg: #e1e1e1; /* Normal bg 253 */
+        --theme-bg-muted: #d1d0d1; /* Pmenu/LineNr bg 251 */
+        --theme-bg-subtle: #999872; /* LineNr fg 101 */
+        --theme-text: #616161; /* Normal fg 239 */
+        --theme-text-subtle: #4b4b4b; /* Conceal fg 237 */
+        --theme-heading: #9b1300; /* Title 88 */
+        --theme-border: #c8c8c8; /* VertSplit 250 */
+        --theme-accent: #e17899; /* Keyword 168 */
+        --theme-link: #e17899; /* Underlined 168 */
+        --theme-visited: #be7572; /* Include 131 */
+        --theme-active: #e12672; /* Exception 161 */
+        --theme-orange: #9b1300; /* WarningMsg 88 */
+        --theme-selection-bg: #bcdede; /* Visual 152 */
+        --theme-selection-fg: #616161;
         --font-mono: "Paper Mono", monospace;
         --nvim-divider-pattern: "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            /* Dark: bg 237, fg 252 */
+            --theme-bg: #4b4b4b; /* Normal bg 237 */
+            --theme-bg-muted: #565656; /* Pmenu/LineNr bg 238 */
+            --theme-bg-subtle: #999872; /* LineNr fg 101 */
+            --theme-text: #d9d9d9; /* Normal fg 252 */
+            --theme-text-subtle: #e9e9e9; /* Conceal fg 254 */
+            --theme-heading: #e0bebc; /* Title 181 */
+            --theme-border: #333233; /* VertSplit 235 */
+            --theme-accent: #e17899; /* Keyword 168 */
+            --theme-link: #e0bebc; /* Underlined 181 */
+            --theme-visited: #e19972; /* Include 173 */
+            --theme-active: #e12672; /* Exception 161 */
+            --theme-orange: #dfbc72; /* WarningMsg 179 */
+            --theme-selection-bg: #007173; /* Visual 23 */
+            --theme-selection-fg: #d9d9d9;
+        }
     }
 
     html {
@@ -66,7 +91,7 @@
     h4,
     h5,
     h6 {
-        color: var(--theme-text-subtle);
+        color: var(--theme-heading);
     }
 
     h1 {
@@ -117,11 +142,11 @@
         text-underline-offset: 0.15em;
     }
     a:visited {
-        color: #551a8b;
+        color: var(--theme-visited);
     }
 
     a:active {
-        color: #ff0000;
+        color: var(--theme-active);
     }
 
     hr {
